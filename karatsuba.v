@@ -2,7 +2,6 @@ module karatsuba_5(A,B,C);
     // base module
     input wire[5:0] A,B;
     output wire[10:0] C;
-
     assign C = A*B;
 endmodule
 
@@ -27,22 +26,13 @@ module karatsuba_10(A,B,C);
     karatsuba_5 k2(Ah,Bh,c2);  // c2 is Ah*Bh
     karatsuba_5 k3(Al_plus_Ah,Bl_plus_Bh,c3);  // c3 is the other one
 
-    // assign C = {{10{1'b0}},c3};
-
-    // now combining all the other terms together
-    // 0 exteding c1 c2 and c3
     wire[20:0] low, mid, high;
 
-    // there may be a need to omit this step if register assigning from a particular step is possible
     assign temp = c3 ^ c2 ^ c1;
     assign low = {{10{1'b0}}, c1}; 
     assign mid = {{5{1'b0}}, temp, {5{1'b0}}}; 
     assign high = {c2, {10{1'b0}}}; 
 
-
-    // assign C = high;
-    // reg[20:0] answer = low ^ mid ^ high;
-    // answer = low ^ mid ^ high;
     assign C = low ^ mid ^ high;
 
 endmodule
@@ -69,18 +59,13 @@ module karatsuba_20(A,B,C);
     karatsuba_10 k2(Ah,Bh,c2);  // c2 is Ah*Bh
     karatsuba_10 k3(Al_plus_Ah,Bl_plus_Bh,c3);  // c3 is the other one
 
-    // now combining all the other terms together
-    // 0 exteding c1 c2 and c3
     wire[40:0] low, mid, high;
 
-    // there may be a need to omit this step if register assigning from a particular step is possible
     assign temp = c3 ^ c2 ^ c1;
     assign low = {{20{1'b0}}, c1}; 
     assign mid = {{10{1'b0}}, temp, {10{1'b0}}}; 
     assign high = {c2, {20{1'b0}}}; 
 
-    // reg[40:0] answer = low ^ mid ^ high;
-    // answer = low ^ mid ^ high;
     assign C = low ^ mid ^ high;
 
 endmodule
@@ -108,18 +93,13 @@ module karatsuba_40(A,B,C);
     karatsuba_20 k2(Ah,Bh,c2);  // c2 is Ah*Bh
     karatsuba_20 k3(Al_plus_Ah,Bl_plus_Bh,c3);  // c3 is the other one
 
-    // now combining all the other terms together
-    // 0 exteding c1 c2 and c3
     wire[80:0] low, mid, high;
 
-    // there may be a need to omit this step if register assigning from a particular step is possible
     assign temp = c3 ^ c2 ^ c1;
     assign low = {{40{1'b0}}, c1}; 
     assign mid = {{20{1'b0}}, temp, {20{1'b0}}}; 
     assign high = {c2, {40{1'b0}}}; 
 
-    // reg[80:0] answer = low ^ mid ^ high;
-    // answer = low ^ mid ^ high;
     assign C = low ^ mid ^ high;
 
 endmodule
@@ -146,18 +126,13 @@ module karatsuba_81(A,B,C);
     karatsuba_40 k2(Ah,Bh,c2);  // c2 is Ah*Bh
     karatsuba_40 k3(Al_plus_Ah,Bl_plus_Bh,c3);  // c3 is the other one
 
-    // now combining all the other terms together
-    // 0 exteding c1 c2 and c3
     wire[162:0] low, mid, high;
 
-    // there may be a need to omit this step if register assigning from a particular step is possible
     assign temp = c3 ^ c2 ^ c1;
     assign low = {{82{1'b0}}, c1}; 
     assign mid = {{41{1'b0}}, temp, {41{1'b0}}}; 
     assign high = {c2, {82{1'b0}}}; 
 
-    // reg[162:0] answer = low ^ mid ^ high;
-    // answer = low ^ mid ^ high;
     assign C = low ^ mid ^ high;
 
 endmodule
@@ -183,35 +158,24 @@ module karatsuba_162(A,B,C);
     karatsuba_81 k2(Ah,Bh,c2);  // c2 is Ah*Bh
     karatsuba_81 k3(Al_plus_Ah,Bl_plus_Bh,c3);  // c3 is the other one
 
-    // now combining all the other terms together
-    // 0 exteding c1 c2 and c3
     wire[324:0] low, mid, high;
 
-    // there may be a need to omit this step if register assigning from a particular step is possible
     assign temp = c3 ^ c2 ^ c1;
     assign low = {{162{1'b0}}, c1}; 
     assign mid = {{80{1'b0}}, temp, {82{1'b0}}}; 
     assign high = {c2, {164{1'b0}}}; 
 
-    // reg[324:0] answer = low ^ mid ^ high;
     assign C = low ^ mid ^ high;
 
 endmodule
 
-module reducer(In, Poly, Out);
-    input wire[324:0] In;
-    input wire[162:0] Poly;
-    output wire[162:0] Out;
 
-    
-endmodule
-
-module Multiplier(A,B,C,P);
+module Kartsuba_Multiplier(A,B,C,P);
     input wire[162:0] A,B,P;
     output wire[162:0] C;
 
-    wire[324:0] karatsuba_output;
-    karatsuba_162 k(A,B,karatsuba_output);
+    wire[324:0] karatsuba_out;
+    karatsuba_162 k(A,B,karatsuba_out);
 
-    reducer r(karatsuba_output,P, C);
+    assign C = karatsuba_out;
 endmodule

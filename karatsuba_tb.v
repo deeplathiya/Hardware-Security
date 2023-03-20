@@ -1,21 +1,16 @@
-`timescale 1ns / 1ps
-`include "karatsuba.v"
+// `timescale 1ns / 1ps
+// `include "karatsuba.v"
 
 module test();
     reg[162:0] A,B;
     wire[324:0] out;
 
-    karatsuba_162 kar(A,B,out);
-	// shift_module s(A,B,controls,out);
-
-    // testing all the control signals
+    Kartsuba_Multiplier k1(A,B,out);
     initial begin
-        $monitor("A = %d   B = %d   out = %d",A,B,out);
+        $monitor("A = %h   B = %h   out = %h",A,B,out);
 
-        {A,B} = {163'd5, 163'd5}; #20;
-        {A,B} = {163'd512, 163'd1024}; #20;
-        {A,B} = {163'd10, 163'd15}; #20;
-        {A,B} = {163'd12, 163'd13}; #20;
+        {A,B} = {0x8000000000000000000000000000000000000001, 0x8000000000000000000000000000000000000001};
+        {A,B} = {0x810000000000000000000000000000000000001, 0x820000000000000000000000000000000000001};
     end
 
 
